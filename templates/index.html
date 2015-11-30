@@ -40,13 +40,28 @@
  
  
     var mapOptions = {
-      zoom: 14,
+      zoom: 13,
       center: new google.maps.LatLng(30.26, -97.73),
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
  
     map=new google.maps.Map($('#mapcanvas')[0], mapOptions);
     
+    {% for coord in coords %}
+    var latlon{{loop.index}} = new google.maps.LatLng({{coord.1}}, {{coord.0}});
+    {% endfor %}
+    
+    {% for text in add_fuel %}
+    var marker{{loop.index}} = new google.maps.Marker({
+        position: latlon{{loop.index}},
+        map: map,
+        title: "{{text}}"
+    });
+    {% endfor %}
+    
+    {% for marker in add_fuel %}
+    marker{{loop.index}}.setMap(map);
+    {% endfor %}
  
     //*********************************************************************
     // Add the layer showing the inventory
